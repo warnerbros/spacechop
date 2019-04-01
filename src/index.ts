@@ -1,8 +1,10 @@
-import {app} from './app';
+import {createApp} from './app';
 
 const {
   PORT = 3000,
 } = process.env;
+
+const app = createApp();
 
 // export server to enable testing.
 export let server;
