@@ -32,9 +32,13 @@ export default class S3Storage implements Storage {
     if (config.endpoint) {
       endpoint = new AWS.Endpoint(config.endpoint);
     }
+
+    const accessKeyId = config.access_key_id ? config.access_key_id : null;
+    const secretAccessKey = config.secret_access_key ? config.secret_access_key : null;
+
     this.S3 = new AWS.S3({
-      accessKeyId: config.access_key_id,
-      secretAccessKey: config.secret_access_key,
+      accessKeyId,
+      secretAccessKey,
       region: config.region,
       endpoint,
     });
