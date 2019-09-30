@@ -64,6 +64,7 @@ export const requestHandler = (
   }
   // Create trace instance.
   const trace = new Trace();
+  trace.log('request_start', req.url);
   // Extract params from request (enables the use of dynamic named params (.*)).
   const params = extractParamValues(keys, req.params);
 
@@ -100,6 +101,7 @@ export const requestHandler = (
       res.set('X-Cache', 'HIT');
       res.set('X-Key', fromCache.key);
       await respond(res, fromCache.stream, fromCache.contentType, config);
+      trace.log('request_end', req.url);
       trace.end();
       return;
     }
@@ -112,6 +114,7 @@ export const requestHandler = (
   if (fromSource && !fromSource.stream) {
     res.status(404);
     res.end('Could not find image');
+    trace.log('request_end', req.url);
     trace.warn('image', 'Could not find image');
     return;
   } else {
@@ -123,6 +126,7 @@ export const requestHandler = (
   if (onlyAnalyze) {
     const { state } = await buildTransformation(fromSource.stream, steps);
     res.json(state);
+    trace.log('request_end', req.url);
     trace.end();
   } else {
     try {
@@ -139,10 +143,12 @@ export const requestHandler = (
         uploadToStorage(storage, params, streamToCache, contentType);
       }
       await respond(res, streamToRespondWith, contentType, config);
+      trace.log('request_end', req.url);
       trace.end();
     } catch (err) {
       res.status(400);
       res.end('Bad request');
+      trace.log('request_end', req.url);
       trace.warn('error', err);
     }
   }
