@@ -22,7 +22,7 @@
   "dependencies": {
     "js-yaml": "~3.12.0",
     "path-to-regexp": "~2.4.0",
-    "runtypes": "~2.1.6"
+    "runtypes": "~2.2.0"
   },
   "devDependencies": {
     "typescript": "^3.0.1",
